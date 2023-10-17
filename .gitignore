@@ -1,0 +1,17 @@
+*.ini
+*.vspscc
+*.log
+[Bb]in
+[Dd]ebug*/
+*.user
+obj/
+[Rr]elease*/
+_ReSharper*/
+.vs/
+.vscode/
+**/node_modules/
+**/package-lock.json
+.vscode*/
+.idea/
+Books/
+reactapp/.env.development.local

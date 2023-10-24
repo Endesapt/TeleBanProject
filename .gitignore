@@ -15,3 +15,6 @@ _ReSharper*/
 .idea/
 Books/
 reactapp/.env.development.local
+*.db
+*.db-shm
+*.db-wal

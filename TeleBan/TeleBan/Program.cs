@@ -4,6 +4,7 @@ using TeleBan.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors();
 builder.Services.AddAuthorization();
 builder.Services.AddKeycloakAuthentication(builder.Configuration, o =>
 {
@@ -15,11 +16,16 @@ builder.Services
     .AddAuthorization()
     .AddTypes()
     .AddInMemorySubscriptions()
-    .RegisterDbContext<ApplicationDbContext>();
+    .RegisterDbContext<ApplicationDbContext>()
+    .AddFiltering();
+    
 
 
 var app = builder.Build();
-
+app.UseCors(builder => builder.AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+);
 app.UseWebSockets();
 app.MapGraphQL();
 

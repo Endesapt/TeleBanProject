@@ -13,7 +13,15 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n        query User{\n          user{\n              id  \n          }\n        }\n": types.UserDocument,
+    "\nmutation AddUser {\n    addUser {\n        id\n        userName\n        name\n    }\n}\n": types.AddUserDocument,
+    "\nmutation PostMessage($id:Int!,$message:String!) {\n    postMessage(conversationId: $id, message: $message) {\n        id\n        senderId\n        conversationId\n        messageText\n        createdAt\n    }\n}\n": types.PostMessageDocument,
+    "\nmutation DeleteMessage($conversationId:Int!,$messageId:String!) {\n    deleteMessage(conversationId: $conversationId, messageId: $messageId) {\n        id\n        conversationId\n        messageText\n        createdAt\n    }\n}\n": types.DeleteMessageDocument,
+    "\nmutation CreateConversation($title:String!) {\n    createConversation(title: $title) {\n        id\n        title\n        creator {\n            id\n            userName\n            name\n        }\n    }\n}\n": types.CreateConversationDocument,
+    "\nquery User {\n    user {\n        id\n        userName\n        name\n    }\n}\n": types.UserDocument,
+    "\nquery Messages($id:Int!) {\n    messages(conversationId: $id) {\n        id\n        conversationId\n        messageText\n        createdAt\n        sender{\n            userName\n        }\n    }\n}\n": types.MessagesDocument,
+    "\n    query Conversations{\n        conversations {\n            id\n            title\n            messages{\n                messageText\n                senderId\n            }\n            notificationCount @client\n        }    \n    }\n": types.ConversationsDocument,
+    "\nsubscription OnConversationNewMessage($conversationId:ID!) {\n    onConversationNewMessage(conversationId: $conversationId) {\n        id\n        conversationId\n        messageText\n        createdAt\n        sender{\n            userName\n        }\n    }\n}\n": types.OnConversationNewMessageDocument,
+    "\nsubscription onDeleteMessage($conversationId:ID!){\n    onDeleteMessage(conversationId: $conversationId){\n        id\n    }\n}\n": types.OnDeleteMessageDocument,
 };
 
 /**
@@ -33,7 +41,39 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n        query User{\n          user{\n              id  \n          }\n        }\n"): (typeof documents)["\n        query User{\n          user{\n              id  \n          }\n        }\n"];
+export function gql(source: "\nmutation AddUser {\n    addUser {\n        id\n        userName\n        name\n    }\n}\n"): (typeof documents)["\nmutation AddUser {\n    addUser {\n        id\n        userName\n        name\n    }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nmutation PostMessage($id:Int!,$message:String!) {\n    postMessage(conversationId: $id, message: $message) {\n        id\n        senderId\n        conversationId\n        messageText\n        createdAt\n    }\n}\n"): (typeof documents)["\nmutation PostMessage($id:Int!,$message:String!) {\n    postMessage(conversationId: $id, message: $message) {\n        id\n        senderId\n        conversationId\n        messageText\n        createdAt\n    }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nmutation DeleteMessage($conversationId:Int!,$messageId:String!) {\n    deleteMessage(conversationId: $conversationId, messageId: $messageId) {\n        id\n        conversationId\n        messageText\n        createdAt\n    }\n}\n"): (typeof documents)["\nmutation DeleteMessage($conversationId:Int!,$messageId:String!) {\n    deleteMessage(conversationId: $conversationId, messageId: $messageId) {\n        id\n        conversationId\n        messageText\n        createdAt\n    }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nmutation CreateConversation($title:String!) {\n    createConversation(title: $title) {\n        id\n        title\n        creator {\n            id\n            userName\n            name\n        }\n    }\n}\n"): (typeof documents)["\nmutation CreateConversation($title:String!) {\n    createConversation(title: $title) {\n        id\n        title\n        creator {\n            id\n            userName\n            name\n        }\n    }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery User {\n    user {\n        id\n        userName\n        name\n    }\n}\n"): (typeof documents)["\nquery User {\n    user {\n        id\n        userName\n        name\n    }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nquery Messages($id:Int!) {\n    messages(conversationId: $id) {\n        id\n        conversationId\n        messageText\n        createdAt\n        sender{\n            userName\n        }\n    }\n}\n"): (typeof documents)["\nquery Messages($id:Int!) {\n    messages(conversationId: $id) {\n        id\n        conversationId\n        messageText\n        createdAt\n        sender{\n            userName\n        }\n    }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n    query Conversations{\n        conversations {\n            id\n            title\n            messages{\n                messageText\n                senderId\n            }\n            notificationCount @client\n        }    \n    }\n"): (typeof documents)["\n    query Conversations{\n        conversations {\n            id\n            title\n            messages{\n                messageText\n                senderId\n            }\n            notificationCount @client\n        }    \n    }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nsubscription OnConversationNewMessage($conversationId:ID!) {\n    onConversationNewMessage(conversationId: $conversationId) {\n        id\n        conversationId\n        messageText\n        createdAt\n        sender{\n            userName\n        }\n    }\n}\n"): (typeof documents)["\nsubscription OnConversationNewMessage($conversationId:ID!) {\n    onConversationNewMessage(conversationId: $conversationId) {\n        id\n        conversationId\n        messageText\n        createdAt\n        sender{\n            userName\n        }\n    }\n}\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\nsubscription onDeleteMessage($conversationId:ID!){\n    onDeleteMessage(conversationId: $conversationId){\n        id\n    }\n}\n"): (typeof documents)["\nsubscription onDeleteMessage($conversationId:ID!){\n    onDeleteMessage(conversationId: $conversationId){\n        id\n    }\n}\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

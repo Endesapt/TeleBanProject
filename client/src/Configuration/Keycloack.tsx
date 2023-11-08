@@ -5,7 +5,7 @@ const keycloak = new Keycloak({
  clientId: "myclient",
 });
 keycloak.onTokenExpired = () => {
-    keycloak.updateToken(3).then(() => {
+    keycloak.updateToken(30).then(() => {
         localStorage.setItem("access_token",keycloak.token!);
     });
 }

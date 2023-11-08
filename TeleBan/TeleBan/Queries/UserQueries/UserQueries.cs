@@ -19,7 +19,9 @@ namespace TeleBan.Queries.UserQueries
         public ICollection<Conversation> GetConversations(ApplicationDbContext context, ClaimsPrincipal claims)
         {
             string username = claims.FindFirstValue("preferred_username")!;
-            return context.Users.Include(u=>u.Conversations).FirstOrDefault(u=>u.UserName==username).Conversations;
+            return context.Users.Include(u=>u.Conversations)
+                    .ThenInclude((c)=>c.Messages.Take(1))
+                .FirstOrDefault(u=>u.UserName==username).Conversations;
         }
     }
 }

@@ -1,52 +1,48 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Routes,Route, useParams } from "react-router-dom";
-import { ChatProps } from "../Types/ChatProps";
-import OtherMessage from "./OtherMessage";
-import MyMessage from "./MyMessage";
-import rightArrow from '../right_arrow.svg'
+import MessageBlock from "./MessageBlock";
 import MessageInput from "./MessageInput";
+import { useQuery } from "@apollo/client";
+import { GET_MESSAGES } from "../Queries/Queries";
+import { CHAT_SUBSCRIPTIONS, DELETE_MESSAGE_SUBSCRIPTION } from "../Queries/Subscriptions";
 
 
-const DUMMY_MESSAGES=[
-    {
-        messageText:"Hellofhgsjhsdgjskfhdflkghdsflkgjfdjkgbkbjkbgjbsdflkjbgs",
-        senderName:"admin"
-    },
-    {
-        messageText:"HelloHellofhgsjhsdgjskfhdflkghdsflkgjfdjkgbkbjkbgjbsdflkjbgs",
-        senderName:"negri"
-    },
-    {
-        messageText:"Hello",
-        senderName:"negri2"
-    },
-]
-export default function Chat({userName}:ChatProps){
+
+export default function Chat({userName,userId}:{userName:string,userId:number}){
     
     const params=useParams();
     const chatId=params.chatId!;
-    const[messages,setMessages]=useState(DUMMY_MESSAGES);
+    const{loading,error,data}=useQuery(GET_MESSAGES,{variables:{id:parseInt(chatId)}});
+    const[messages,setMessages]=useState(data?.messages);
+    useEffect(()=>{
+        if(!loading && !error){
+            setMessages(data?.messages)
+        }
+    },[loading,data?.messages,messages])
+
+
+ 
 
     return(
         <>
-            <div className="h-14 w-full pl-1 bg-white dark:bg-gray-900 border-s border-slate-50 dark:border-black">
+            <div className="h-14 w-full pl-1 bg-white dark:bg-gray-900 border-s border-slate-50 dark:border-black overflow-auto">
                 <p className="font-bold">{chatId}</p>
             </div>
-            <div className=" w-full grid grid-cols-[1fr_minmax(23rem,5fr)_1fr]  ">
+            <div id="chatScroller"className=" w-full grid grid-cols-[1fr_minmax(23rem,5fr)_1fr] h-full overflow-scroll  ">
                 <div></div>
-                <div className="p-2">
-                    <div className="overflow-auto grid grid-cols-1">
-                        {messages.map((message)=>{
-                        if(message.senderName==userName){
-                            return <MyMessage  senderName={message.senderName} messageText={message.messageText}/>
+                <div className="p-2  max-h-full">
+                    <div className="grid grid-cols-1 relative">
+                        {messages?.map((message)=>{
+                        if(message.sender.userName==userName){
+                            return <MessageBlock key={message.id} chatId={chatId} isMine={true} {...message}/>
                         }else{
-                            return <OtherMessage senderName={message.senderName} messageText={message.messageText}/>
+                            return <MessageBlock key={message.id} chatId={chatId} isMine={false} {...message}/>
                         }
                         })}
                     </div>
                 </div>
             </div>
-            <MessageInput chatId={chatId} setMessages={setMessages} messages={messages} />
+            <MessageInput userName={userName} chatId={chatId}   />
 
             
         </>

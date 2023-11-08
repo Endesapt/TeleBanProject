@@ -11,6 +11,9 @@ namespace TeleBan.Queries.ConversationQueries
         public Message OnConversationNewMessage(
            [ID] int conversationId,
            [EventMessage] Message message) =>message;
+        
+        [Subscribe(With =nameof(SubscribeToOnDeleteMessage))]
+        public Message OnDeleteMessage([ID] int conversationId, [EventMessage] Message message) =>message;
 
         public async ValueTask<ISourceStream<Message>> SubscribeToOnConversationNewMessage(
             int conversationId,
@@ -18,5 +21,10 @@ namespace TeleBan.Queries.ConversationQueries
             CancellationToken cancellationToken) =>
             await eventReceiver.SubscribeAsync<Message>(
                 $"OnNewMessage_{conversationId}", cancellationToken);
+        public async ValueTask<ISourceStream<Message>> SubscribeToOnDeleteMessage(int conversationId,
+            [Service] ITopicEventReceiver eventReceiver,
+            CancellationToken cancellationToken) =>
+            await eventReceiver.SubscribeAsync<Message>(
+                $"OnDeleteMessage_{conversationId}", cancellationToken);
     }
 }

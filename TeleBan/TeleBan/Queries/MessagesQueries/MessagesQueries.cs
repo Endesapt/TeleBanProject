@@ -21,7 +21,7 @@ namespace TeleBan.Queries.MessagesQueries
                 .Build());
                 return null;
             }
-            return context.Messages.Where(m => m.ConversationId == ConversationId);
+            return context.Messages.Include(m=>m.Sender).Where(m => m.ConversationId == ConversationId);
         }
         
     }

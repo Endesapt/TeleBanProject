@@ -1,5 +1,9 @@
-export type MessageProps={
+export type Message={
     messageText:string,
-    senderName:string,
+    sender:{
+        userName:string,
+    },
+    id:string,
+    chatId:string
     //sendTime:Date
 }

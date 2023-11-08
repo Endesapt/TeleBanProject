@@ -11,7 +11,7 @@ using TeleBan.Data;
 namespace TeleBan.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20231023182250_Initial")]
+    [Migration("20231101092008_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -137,7 +137,7 @@ namespace TeleBan.Migrations
             modelBuilder.Entity("TeleBan.Types.Message", b =>
                 {
                     b.HasOne("TeleBan.Types.Conversation", "Conversation")
-                        .WithMany()
+                        .WithMany("Messages")
                         .HasForeignKey("ConversationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -151,6 +151,11 @@ namespace TeleBan.Migrations
                     b.Navigation("Conversation");
 
                     b.Navigation("Sender");
+                });
+
+            modelBuilder.Entity("TeleBan.Types.Conversation", b =>
+                {
+                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

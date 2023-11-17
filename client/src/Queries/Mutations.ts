@@ -42,6 +42,24 @@ mutation CreateConversation($title:String!) {
             userName
             name
         }
+        conversationGuid
+        creatorId
     }
 }
 `)
+export const ENTER_GROUP=gql(`
+    mutation EnterConversation($conversationGuid:UUID!) {
+    enterConversation(id: $conversationGuid) {
+        id
+        title
+        conversationGuid
+    }
+}
+`)
+export const DELETE_CONVERSATION=gql(`
+mutation DeleteConversation($id:Int!) {
+    deleteConversation(id: $id) {
+        id
+        title
+    }
+}`)

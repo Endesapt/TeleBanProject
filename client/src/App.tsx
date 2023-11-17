@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { useKeycloak } from 'keycloak-react-web/dist/keycloak';
@@ -9,10 +9,12 @@ import Chat from './Components/Chat';
 import {useMutation, useQuery } from '@apollo/client';
 import { USER_CREATE } from './Queries/Mutations';
 import { GET_USER } from './Queries/Queries';
+import EnterChat from './Pages/EnterChat';
 
 
 
 function App() {
+  const [currentChatName,setCurrentChat]=useState("");
   const { keycloak, initialized } = useKeycloak();
   const[userMutation,{data,loading,error}]=useMutation(USER_CREATE,{ errorPolicy:"ignore" });
   let userName:string,userId:number;
@@ -35,15 +37,19 @@ function App() {
   userId=data?.addUser?.id!;
   userName=keycloak.idTokenParsed!.preferred_username;
   return (
-    <div className='dark:text-slate-300 h-full grid grid-cols-[24rem_auto] '>
-    <Nav/>
-    <div className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-[#1b2431] dark:to-[#131314] grid grid-rows-[3.5rem_1fr_auto] max-h-[100vh]">
-      <Routes>
-        <Route path="k/:chatId" element={<Chat userName={userName} userId={userId}/>}/>
-      </Routes>
-    </div>
+    <Routes>
+      <Route path="/enterChat/:chatGuid" element={<EnterChat/>} />
+      <Route path="/*" element={<div className='dark:text-slate-300 h-full grid grid-cols-[24rem_auto] '>
+          <Nav userName={userName}/>
+          <div className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 dark:from-[#1b2431] dark:to-[#131314] grid grid-rows-[3.5rem_1fr_auto] max-h-[100vh]">
+            <Routes>
+              <Route path="k/:chatId" element={<Chat userName={userName} userId={userId} chatName={currentChatName}  />} />
+            </Routes>
+          </div>
 
-    </div>);
+        </div>}/>
+    </Routes>
+    );
 }
 
 export default App;

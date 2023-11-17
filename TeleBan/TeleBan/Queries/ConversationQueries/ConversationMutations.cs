@@ -18,7 +18,8 @@ namespace TeleBan.Queries.ConversationQueries
             {
                 Title = title,
                 Creator = user,
-                Participants = new List<User>()
+                Participants = new List<User>(),
+                ConversationGuid = Guid.NewGuid(),
             };
             await context.Conversations.AddAsync(conversation);
             conversation.Participants.Add(user);

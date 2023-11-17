@@ -29,7 +29,7 @@ namespace TeleBan.Migrations
 
                     b.HasIndex("ParticipantsId");
 
-                    b.ToTable("ConversationUser");
+                    b.ToTable("ConversationUser", (string)null);
                 });
 
             modelBuilder.Entity("TeleBan.Types.Conversation", b =>
@@ -54,7 +54,7 @@ namespace TeleBan.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Conversations");
+                    b.ToTable("Conversations", (string)null);
                 });
 
             modelBuilder.Entity("TeleBan.Types.Message", b =>
@@ -82,7 +82,7 @@ namespace TeleBan.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("TeleBan.Types.User", b =>
@@ -103,7 +103,7 @@ namespace TeleBan.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ConversationUser", b =>

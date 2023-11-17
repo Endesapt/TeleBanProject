@@ -31,10 +31,10 @@ namespace TeleBan.Queries.UserQueries
             context.SaveChanges();
             return user;
         }
-        public Conversation? EnterConversation(int id,ApplicationDbContext context, ClaimsPrincipal claims, IResolverContext res)
+        public Conversation? EnterConversation(Guid id,ApplicationDbContext context, ClaimsPrincipal claims, IResolverContext res)
         {
             string username = claims.FindFirstValue("preferred_username");
-            var conversation = context.Conversations.Find(id);
+            var conversation = context.Conversations.FirstOrDefault(c=>c.ConversationGuid==id);
             if (conversation == null)
             {
                 res.ReportError(ErrorBuilder.New()
@@ -43,7 +43,7 @@ namespace TeleBan.Queries.UserQueries
                 return null;
             }
             var user = context.Users.Include(u=>u.Conversations).FirstOrDefault(s=>s.UserName==username);
-            if (user.Conversations.FirstOrDefault(u => u.Id == id) != null) {
+            if (user.Conversations.FirstOrDefault(u => u.ConversationGuid == id) != null) {
                 res.ReportError(ErrorBuilder.New()
                 .SetMessage("You are already in this conversation!!")
                 .Build()) ;

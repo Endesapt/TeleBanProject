@@ -31,7 +31,16 @@ export const GET_CONVERSATIONS=gql(`
                 messageText
                 senderId
             }
-            notificationCount @client
+            conversationGuid
+            creatorId
         }    
     }
-`);
+`)
+export const GET_CONVERSATION_INFO=gql(`
+    query ConversationInfo($conversationGuid:UUID!) {
+        conversationInfo(conversationGuid: $conversationGuid) {
+            id
+            title
+        }       
+    }
+`)

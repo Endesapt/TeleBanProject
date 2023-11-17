@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Routes,Route, useParams } from "react-router-dom";
 import MessageBlock from "./MessageBlock";
 import MessageInput from "./MessageInput";
-import { useQuery } from "@apollo/client";
-import { GET_MESSAGES } from "../Queries/Queries";
+import { gql, useQuery } from "@apollo/client";
+import { GET_CONVERSATIONS, GET_CONVERSATION_INFO, GET_MESSAGES } from "../Queries/Queries";
 import { CHAT_SUBSCRIPTIONS, DELETE_MESSAGE_SUBSCRIPTION } from "../Queries/Subscriptions";
+import client from "../Configuration/ApolloClient";
 
 
 
-export default function Chat({userName,userId}:{userName:string,userId:number}){
-    
+export default function Chat({userId,userName,chatName}:{userName:string,userId:number,chatName:string}){
     const params=useParams();
     const chatId=params.chatId!;
     const{loading,error,data}=useQuery(GET_MESSAGES,{variables:{id:parseInt(chatId)}});
@@ -26,7 +26,7 @@ export default function Chat({userName,userId}:{userName:string,userId:number}){
     return(
         <>
             <div className="h-14 w-full pl-1 bg-white dark:bg-gray-900 border-s border-slate-50 dark:border-black overflow-auto">
-                <p className="font-bold">{chatId}</p>
+                <p className="font-bold">{chatName}</p>
             </div>
             <div id="chatScroller"className=" w-full grid grid-cols-[1fr_minmax(23rem,5fr)_1fr] h-full overflow-scroll  ">
                 <div></div>

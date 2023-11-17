@@ -3,18 +3,25 @@ import {ReactComponent as Pen} from '../pen.svg';
 import { CREATE_GROUP } from '../Queries/Mutations';
 import { useMutation } from '@apollo/client';
 import { Conversation } from '../Types/Conversation';
-import { ConversationsQuery } from '../__generated__/graphql';
-export default function AddGroup({chats,setChats}:{chats:any,setChats:any}){
+import client from '../Configuration/ApolloClient';
+import { GET_CONVERSATIONS } from '../Queries/Queries';
+export default function AddGroup({chats}:{chats:any}){
     const menu= useRef<HTMLInputElement>(null);
-    const [addGroup,{data,error,loading}]=useMutation(CREATE_GROUP);
+    const [addGroup,groupData]=useMutation(CREATE_GROUP);
     useEffect(()=>{
-        if(!loading && data){
-
-            setChats((chats:any)=>{
-                return [...chats,data.createConversation]
-            })
+        if(!groupData.loading && groupData.data){
+            const c=groupData.data.createConversation;
+            client.cache.updateQuery({query:GET_CONVERSATIONS},(data)=>({
+                conversations:[...data?.conversations!,{
+                    id:c.id,
+                    title:c.title,
+                    messages:[],
+                    conversationGuid:c.conversationGuid,
+                    creatorId:c.creatorId
+                }]
+            }))
         }
-    },[loading])
+    },[groupData.loading])
     const [groupTitle,setGroupTitle]=useState("");
     function handleClick(e:React.MouseEvent<HTMLDivElement, MouseEvent>){
         if(menu.current!.classList.contains("absolute"))return;

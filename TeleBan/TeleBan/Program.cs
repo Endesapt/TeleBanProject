@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors();
 builder.Services.AddAuthorization();
+builder.Services.AddHttpLogging(o => { });
 builder.Services.AddKeycloakAuthentication(builder.Configuration, o =>
 {
     o.RequireHttpsMetadata = false;
@@ -22,11 +23,13 @@ builder.Services
 
 
 var app = builder.Build();
+app.UseHttpLogging();
 app.UseCors(builder => builder.AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader()
 );
 app.UseWebSockets();
 app.MapGraphQL();
+app.MapGet("/health", () => "Healthy");
 
 app.RunWithGraphQLCommands(args);

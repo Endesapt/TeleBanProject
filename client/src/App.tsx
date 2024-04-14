@@ -28,7 +28,7 @@ function App() {
     }
     
   }, [initialized]);
-  if (!initialized) {
+  if (!initialized || loading) {
     return <p>Loading...</p>;
   }
   if (!keycloak.authenticated) {

@@ -1,0 +1,32 @@
+name: my_messenger
+
+networks:
+  mynet:
+    driver: bridge
+
+services:
+  authServer:
+    image: quay.io/keycloak/keycloak:24.0.2
+    ports:
+      - 8080:8080
+    networks:
+      - mynet
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+    command: start-dev
+  server:
+    build: ../TeleBan
+    ports:
+      - 5095:80 
+    depends_on:
+      - authServer
+    networks:
+      - mynet
+  client:
+    build: ../client
+    ports:
+      - 3000:3000
+    depends_on:
+      - server
+      - authServer

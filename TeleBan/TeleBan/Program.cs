@@ -10,8 +10,18 @@ builder.Services.AddHttpLogging(o => { });
 builder.Services.AddKeycloakAuthentication(builder.Configuration, o =>
 {
     o.RequireHttpsMetadata = false;
+    o.TokenValidationParameters = new()
+    {
+        ValidateIssuer = false,
+        ValidateAudience=false,
+        ValidateLifetime=true,
+    };
 });
-builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite("Data Source=conferences.db"));
+builder.Services.AddDbContext<ApplicationDbContext>(options => {
+    var str = builder.Configuration["DBConnectionString"];
+    options.UseMySQL(str);
+}
+);
 builder.Services
     .AddGraphQLServer()
     .AddAuthorization()
@@ -31,5 +41,11 @@ app.UseCors(builder => builder.AllowAnyOrigin()
 app.UseWebSockets();
 app.MapGraphQL();
 app.MapGet("/health", () => "Healthy");
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
+    dbContext.Database.Migrate();
+}
 
 app.RunWithGraphQLCommands(args);

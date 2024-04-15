@@ -3,7 +3,9 @@ name: my_messenger
 networks:
   mynet:
     driver: bridge
-
+volumes:
+  db_data:
+    driver: local
 services:
   authServer:
     image: quay.io/keycloak/keycloak:24.0.2
@@ -17,10 +19,12 @@ services:
     command: start-dev
   server:
     build: ../TeleBan
+    restart: always
     ports:
       - 5095:80 
     depends_on:
       - authServer
+      - db
     networks:
       - mynet
   client:
@@ -30,3 +34,12 @@ services:
     depends_on:
       - server
       - authServer
+  db:
+    image: mysql
+    ports:
+        - "3306:3306"
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+    networks:
+      - mynet

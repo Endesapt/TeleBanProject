@@ -10,6 +10,7 @@ namespace TeleBan.Types
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [MaxLength(255)]
         public Guid Id { get; set; }
         [Required]
         public int SenderId {  get; set; }

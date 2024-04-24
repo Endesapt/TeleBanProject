@@ -18,7 +18,11 @@ builder.Services.AddKeycloakAuthentication(builder.Configuration, o =>
     };
 });
 builder.Services.AddDbContext<ApplicationDbContext>(options => {
-    var str = builder.Configuration["DBConnectionString"];
+    var server=builder.Configuration["DB_SERVER"];
+    var user=builder.Configuration["DB_USER"] ??"root";
+    var password=builder.Configuration["DB_PASSWORD"]?? "root";
+    var db=builder.Configuration["DB_DATABASE"]??"mysql";
+    var str =$"server={server};user={user};password={password};database={db};";
     options.UseMySQL(str);
 }
 );

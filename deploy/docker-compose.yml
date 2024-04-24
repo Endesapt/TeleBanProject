@@ -14,8 +14,8 @@ services:
     networks:
       - mynet
     environment:
-      - KEYCLOAK_ADMIN=admin
-      - KEYCLOAK_ADMIN_PASSWORD=admin
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     command: start-dev
   server:
     build: ../TeleBan
@@ -27,6 +27,11 @@ services:
       - db
     networks:
       - mynet
+    environment:
+      DB_SERVER: db
+      DB_USER: root
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: mysql
   client:
     build: ../client
     ports:
@@ -40,6 +45,6 @@ services:
         - "3306:3306"
     restart: always
     environment:
-        MYSQL_ROOT_PASSWORD: root
+        MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     networks:
       - mynet

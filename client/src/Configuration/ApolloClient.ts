@@ -5,7 +5,7 @@ import { createClient } from 'graphql-ws';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { cache } from './cache';
 const httpLink=new HttpLink({
-  uri: 'http://localhost:5095/graphql',
+  uri: process.env.REACT_APP_GRAPHQL_URL,
   fetchOptions:{
     mode:"cors"
   },
@@ -21,7 +21,7 @@ const authLink = setContext((_, { headers }) => {
   }
 });
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:5095/graphql',
+  url: process.env.REACT_APP_WS_GRAPHQL_URL!,
 }))
 const splitLink = split(
   ({ query }) => {

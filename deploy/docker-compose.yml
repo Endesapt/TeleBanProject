@@ -33,12 +33,20 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: mysql
   client:
-    build: ../client
+    build: 
+      context: ../client
     ports:
       - 3000:3000
     depends_on:
       - server
       - authServer
+    environment:
+      REACT_APP_KEYCLOAK_REALM: master
+      REACT_APP_KEYCLOAK_CLIENT_ID: myclient
+      REACT_APP_GRAPHQL_URL: http://localhost:5095/graphql
+      REACT_APP_WS_GRAPHQL_URL: ws://localhost:5095/graphql
+      REACT_APP_KEYCLOACK_URL: http://localhost:8080
+      
   db:
     image: mysql
     ports:

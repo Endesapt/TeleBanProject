@@ -1,5 +1,0 @@
-{
-    "KEYCLOAK_SERVER":"http://localhost:8080/realms/master/",
-    "KEYCLOAK_CLIENT_ID":"myclient",
-    "CLIENT_SECRET":"2bpIScjgG3sAU1nj5vzfDhChTyckv0yp"
-}
